@@ -1,0 +1,689 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>מצב התור בקפיטריה - סיווג תמונות</title>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Rubik:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --primary-purple: #5E3B8F;
+            --primary-blue: #2B4C9B;
+            --primary-cyan: #00A3C4;
+            --bg-light: #F8FAFC;
+            --card-bg: #FFFFFF;
+            
+            /* Class Colors */
+            --color-long-bg: #FEF2F2;
+            --color-long-border: #EF4444;
+            --color-long-btn: #DC2626;
+
+            --color-short-bg: #FEFCE8;
+            --color-short-border: #EAB308;
+            --color-short-btn: #CA8A04;
+
+            --color-none-bg: #F0FDF4;
+            --color-none-border: #22C55E;
+            --color-none-btn: #16A34A;
+
+            --color-bad-bg: #F1F5F9;
+            --color-bad-border: #64748B;
+            --color-bad-btn: #475569;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Rubik', sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-light);
+            color: #1E293B;
+            /* רווח בתחתית הדף כדי שסרגל הכלים הצף לא יסתיר את התמונות האחרונות */
+            padding-bottom: 110px; 
+        }
+
+        /* Header & Banner */
+        header {
+            background: linear-gradient(135deg, var(--primary-purple) 0%, var(--primary-blue) 50%, var(--primary-cyan) 100%);
+            color: white;
+            padding: 24px 20px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+        }
+
+        .header-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+
+        .header-text {
+            flex: 1;
+            min-width: 280px;
+        }
+
+        .header-text h1 {
+            font-size: 2.2rem;
+            font-weight: 700;
+            margin-bottom: 8px;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.2);
+        }
+
+        .header-text p {
+            font-size: 1.05rem;
+            opacity: 0.95;
+            line-height: 1.5;
+        }
+
+        .logo-container img {
+            max-height: 70px;
+            width: auto;
+            background: rgba(255, 255, 255, 0.95);
+            padding: 8px 16px;
+            border-radius: 12px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        /* Container & Instructions */
+        .main-container {
+            max-width: 1200px;
+            margin: 30px auto 0;
+            padding: 0 20px;
+        }
+
+        .instructions-card {
+            background: white;
+            border-radius: 16px;
+            padding: 20px 24px;
+            margin-bottom: 25px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.04);
+            border-right: 6px solid var(--primary-cyan);
+        }
+
+        .instructions-card h3 {
+            color: var(--primary-blue);
+            margin-bottom: 10px;
+            font-size: 1.2rem;
+        }
+
+        .instructions-card ul {
+            list-style-position: inside;
+            line-height: 1.7;
+            color: #334155;
+        }
+
+        /* Fixed Floating Toolbar at Bottom */
+        .toolbar {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            background: rgba(255, 255, 255, 0.96);
+            backdrop-filter: blur(8px);
+            padding: 14px 20px;
+            box-shadow: 0 -4px 25px rgba(0,0,0,0.15);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+            border-top: 1px solid #CBD5E1;
+        }
+
+        .toolbar-inner {
+            max-width: 1200px;
+            margin: 0 auto;
+            width: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+
+        .download-buttons {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            flex: 1;
+        }
+
+        .btn {
+            border: none;
+            padding: 10px 18px;
+            border-radius: 10px;
+            font-size: 0.95rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            color: white;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.08);
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+        }
+
+        .btn-long { background-color: var(--color-long-btn); }
+        .btn-short { background-color: var(--color-short-btn); }
+        .btn-none { background-color: var(--color-none-btn); }
+
+        .btn-reset {
+            background-color: #64748B;
+            color: white;
+            margin-right: auto;
+        }
+        .btn-reset:hover { background-color: #475569; }
+
+        /* Image Grid Gallery */
+        .gallery-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 20px;
+        }
+
+        .img-card {
+            background: var(--card-bg);
+            border: 2px solid #E2E8F0;
+            border-radius: 16px;
+            padding: 12px;
+            transition: all 0.25s ease;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.03);
+        }
+
+        .img-card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-weight: 700;
+            color: #475569;
+            font-size: 0.95rem;
+            padding: 0 2px;
+        }
+
+        .img-wrapper {
+            width: 100%;
+            height: 170px;
+            border-radius: 10px;
+            overflow: hidden;
+            background-color: #E2E8F0;
+        }
+
+        .img-wrapper img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        /* Pill Selector Buttons - Single Row Layout */
+        .pill-group {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 4px;
+            margin-top: auto;
+        }
+
+        .pill-btn {
+            border: 1px solid #CBD5E1;
+            background: white;
+            color: #334155;
+            padding: 6px 2px;
+            border-radius: 8px;
+            font-size: 0.78rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.15s ease;
+            text-align: center;
+            white-space: nowrap;
+        }
+
+        .pill-btn:hover {
+            border-color: #94A3B8;
+            background: #F8FAFC;
+        }
+
+        .dark-x {
+            color: #475569;
+            font-weight: 700;
+        }
+
+        /* Selected State Styles for Cards */
+        .img-card.state-long {
+            background-color: var(--color-long-bg);
+            border-color: var(--color-long-border);
+        }
+        .img-card.state-long .pill-btn[data-class="long"] {
+            background-color: var(--color-long-btn);
+            color: white;
+            border-color: var(--color-long-btn);
+        }
+
+        .img-card.state-short {
+            background-color: var(--color-short-bg);
+            border-color: var(--color-short-border);
+        }
+        .img-card.state-short .pill-btn[data-class="short"] {
+            background-color: var(--color-short-btn);
+            color: white;
+            border-color: var(--color-short-btn);
+        }
+
+        .img-card.state-none {
+            background-color: var(--color-none-bg);
+            border-color: var(--color-none-border);
+        }
+        .img-card.state-none .pill-btn[data-class="none"] {
+            background-color: var(--color-none-btn);
+            color: white;
+            border-color: var(--color-none-btn);
+        }
+
+        .img-card.state-bad {
+            background-color: var(--color-bad-bg);
+            border-color: var(--color-bad-border);
+            opacity: 0.65;
+        }
+        .img-card.state-bad .pill-btn[data-class="bad"] {
+            background-color: var(--color-bad-btn);
+            color: white;
+            border-color: var(--color-bad-btn);
+        }
+        .img-card.state-bad .pill-btn[data-class="bad"] .dark-x {
+            color: white;
+        }
+        .img-card.state-bad img {
+            filter: grayscale(80%);
+        }
+
+        /* Modals */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(15, 23, 42, 0.6);
+            backdrop-filter: blur(4px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 2000;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.25s ease;
+            padding: 20px;
+        }
+
+        .modal-overlay.active {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        .modal-box {
+            background: white;
+            border-radius: 20px;
+            padding: 28px;
+            max-width: 480px;
+            width: 100%;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.2);
+            text-align: center;
+            transform: scale(0.95);
+            transition: transform 0.25s ease;
+        }
+
+        .modal-overlay.active .modal-box {
+            transform: scale(1);
+        }
+
+        .modal-box h3 {
+            color: var(--primary-purple);
+            font-size: 1.4rem;
+            margin-bottom: 12px;
+        }
+
+        .modal-box p {
+            color: #475569;
+            line-height: 1.6;
+            margin-bottom: 24px;
+        }
+
+        .modal-actions {
+            display: flex;
+            gap: 12px;
+            justify-content: center;
+        }
+
+        .modal-btn {
+            padding: 10px 20px;
+            border-radius: 10px;
+            font-weight: 600;
+            cursor: pointer;
+            font-size: 0.95rem;
+            transition: all 0.2s ease;
+        }
+
+        /* Special Styling for Warning Modal Buttons */
+        .btn-proceed-grey {
+            background-color: #F1F5F9;
+            color: #475569;
+            border: 2px solid #94A3B8;
+        }
+        .btn-proceed-grey:hover {
+            background-color: #E2E8F0;
+        }
+
+        .btn-return-filled {
+            background-color: var(--primary-blue);
+            color: white;
+            border: 2px solid var(--primary-blue);
+        }
+        .btn-return-filled:hover {
+            background-color: var(--primary-purple);
+            border-color: var(--primary-purple);
+        }
+
+        .modal-btn-primary {
+            background: var(--primary-blue);
+            color: white;
+            border: none;
+        }
+
+        .modal-btn-secondary {
+            background: #E2E8F0;
+            color: #475569;
+            border: none;
+        }
+
+        @media (max-width: 768px) {
+            .header-container { flex-direction: column; text-align: center; }
+            .logo-container img { max-height: 55px; }
+            .toolbar-inner { flex-direction: column; align-items: stretch; }
+            .download-buttons { flex-direction: column; }
+            .btn-reset { margin-right: 0; width: 100%; justify-content: center; }
+            body { padding-bottom: 220px; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Header Section -->
+    <header>
+        <div class="header-container">
+            <div class="header-text">
+                <h1>מצב התור בקפיטריה</h1>
+                <p>התמונות הבאות מציגות מצבים שונים של התור: תור ארוך, תור קצר ובלי תור. התמונות האלו יהיו הנתונים עליהם נאמן בהמשך את המודל בעזרת הכלי Teachable Machine.</p>
+            </div>
+            <div class="logo-container">
+                <img src="logo.png" alt="Ai4All Logo" id="program-logo">
+            </div>
+        </div>
+    </header>
+
+    <div class="main-container">
+
+        <!-- Instructions Section -->
+        <div class="instructions-card">
+            <h3>הנחיות לעבודה:</h3>
+            <ul>
+                <li><strong>בדיקת תקינות:</strong> עברו על התמונות. אם תמונה מטושטשת או פגומה – לסמן <code>✖ פסול</code>.</li>
+                <li><strong>סיווג:</strong> סווגו כל תמונה תקינה לאחת משלוש המחלקות: <code>🔴 תור ארוך</code>, <code>🟡 תור קצר</code>, או <code>🟢 בלי תור</code>.</li>
+                <li><strong>הורדה:</strong> בסיום, לחצו על כפתורי ההורדה בסרגל התחתון כדי להוריד את קבצי כל מחלקה למחשבכם.</li>
+            </ul>
+        </div>
+
+        <!-- Image Gallery Grid -->
+        <div class="gallery-grid" id="galleryGrid">
+            <!-- 68 Image Cards dynamically generated via JavaScript -->
+        </div>
+
+    </div>
+
+    <!-- Fixed Floating Toolbar at Bottom -->
+    <div class="toolbar">
+        <div class="toolbar-inner">
+            <div class="download-buttons">
+                <button class="btn btn-long" onclick="initiateDownload('long')">
+                    📥 הורד תמונות "תור ארוך"
+                </button>
+                <button class="btn btn-short" onclick="initiateDownload('short')">
+                    📥 הורד תמונות "תור קצר"
+                </button>
+                <button class="btn btn-none" onclick="initiateDownload('none')">
+                    📥 הורד תמונות "בלי תור"
+                </button>
+            </div>
+            <button class="btn btn-reset" onclick="confirmReset()">
+                🔄 התחל מחדש
+            </button>
+        </div>
+    </div>
+
+    <!-- Modal 1: Smart Startup Resume Prompt -->
+    <div class="modal-overlay" id="startupModal">
+        <div class="modal-box">
+            <h3>עבודה שמורה</h3>
+            <p>מצאנו עבודה שמורה במחשב זה. האם להמשיך אותה או להתחיל מחדש?</p>
+            <div class="modal-actions">
+                <button class="modal-btn modal-btn-primary" onclick="loadSavedData()">המשך עבודה שמורה</button>
+                <button class="modal-btn modal-btn-secondary" onclick="clearDataAndStartFresh()">התחל מחדש</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal 2: Unclassified Warning Prompt -->
+    <div class="modal-overlay" id="warningModal">
+        <div class="modal-box">
+            <h3>⚠️ תמונות שלא סווגו</h3>
+            <p>שימו לב! לא סיווגתם את כל התמונות בעמוד. כמות תמונות קטנה מדי עלולה לפגוע באיכות אימון המודל. האם להמשיך בהורדה בכל זאת?</p>
+            <div class="modal-actions">
+                <button class="modal-btn btn-proceed-grey" id="proceedDownloadBtn">להמשיך בהורדה</button>
+                <button class="modal-btn btn-return-filled" onclick="closeModal('warningModal')">חזרה לסיווג</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal 3: Reset Confirmation Prompt -->
+    <div class="modal-overlay" id="resetModal">
+        <div class="modal-box">
+            <h3>איפוס נתונים</h3>
+            <p>האם אתם בטוחים שברצונכם למחוק את כל הסיווגים ולהתחיל מחדש?</p>
+            <div class="modal-actions">
+                <button class="modal-btn modal-btn-primary" style="background-color: #DC2626;" onclick="executeReset()">כן, אפס הכל</button>
+                <button class="modal-btn modal-btn-secondary" onclick="closeModal('resetModal')">ביטול</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Application Script -->
+    <script>
+        const TOTAL_IMAGES = 68;
+        const STORAGE_KEY = 'cafeteria_queue_classifications_v1';
+        
+        let selections = {};
+
+        // On Page Load
+        document.addEventListener('DOMContentLoaded', () => {
+            renderGallery();
+            checkSavedState();
+        });
+
+        // 1. Render Gallery Grid
+        function renderGallery() {
+            const grid = document.getElementById('galleryGrid');
+            grid.innerHTML = '';
+
+            for (let i = 1; i <= TOTAL_IMAGES; i++) {
+                const card = document.createElement('div');
+                card.className = 'img-card';
+                card.id = `card-${i}`;
+
+                card.innerHTML = `
+                    <div class="img-card-header">
+                        <span>תמונה ${i}</span>
+                    </div>
+                    <div class="img-wrapper">
+                        <img src="images/${i}.jpg" alt="תמונה ${i}" onerror="this.src='https://via.placeholder.com/300x200?text=תמונה+${i}'">
+                    </div>
+                    <div class="pill-group">
+                        <button class="pill-btn" data-class="long" onclick="selectCategory(${i}, 'long')">🔴 ארוך</button>
+                        <button class="pill-btn" data-class="short" onclick="selectCategory(${i}, 'short')">🟡 קצר</button>
+                        <button class="pill-btn" data-class="none" onclick="selectCategory(${i}, 'none')">🟢 ללא</button>
+                        <button class="pill-btn" data-class="bad" onclick="selectCategory(${i}, 'bad')"><span class="dark-x">✖</span> פסול</button>
+                    </div>
+                `;
+                grid.appendChild(card);
+            }
+        }
+
+        // 2. Select Category for Image
+        function selectCategory(imgNum, category) {
+            if (selections[imgNum] === category) {
+                delete selections[imgNum];
+            } else {
+                selections[imgNum] = category;
+            }
+
+            updateCardUI(imgNum);
+            saveToStorage();
+        }
+
+        // Update Card Visual State
+        function updateCardUI(imgNum) {
+            const card = document.getElementById(`card-${imgNum}`);
+            if (!card) return;
+
+            card.classList.remove('state-long', 'state-short', 'state-none', 'state-bad');
+
+            const currentCategory = selections[imgNum];
+            if (currentCategory) {
+                card.classList.add(`state-${currentCategory}`);
+            }
+        }
+
+        // Update All Cards UI
+        function updateAllCardsUI() {
+            for (let i = 1; i <= TOTAL_IMAGES; i++) {
+                updateCardUI(i);
+            }
+        }
+
+        // 3. localStorage State Management
+        function saveToStorage() {
+            localStorage.setItem(STORAGE_KEY, JSON.stringify(selections));
+        }
+
+        function checkSavedState() {
+            const savedData = localStorage.getItem(STORAGE_KEY);
+            if (savedData) {
+                const parsed = JSON.parse(savedData);
+                if (Object.keys(parsed).length > 0) {
+                    openModal('startupModal');
+                    return;
+                }
+            }
+        }
+
+        function loadSavedData() {
+            const savedData = localStorage.getItem(STORAGE_KEY);
+            if (savedData) {
+                selections = JSON.parse(savedData);
+                updateAllCardsUI();
+            }
+            closeModal('startupModal');
+        }
+
+        function clearDataAndStartFresh() {
+            localStorage.removeItem(STORAGE_KEY);
+            selections = {};
+            updateAllCardsUI();
+            closeModal('startupModal');
+        }
+
+        // Reset All
+        function confirmReset() {
+            openModal('resetModal');
+        }
+
+        function executeReset() {
+            clearDataAndStartFresh();
+            closeModal('resetModal');
+        }
+
+        // 4. Download Logic
+        function initiateDownload(category) {
+            const classifiedCount = Object.keys(selections).length;
+            const hasUnclassified = classifiedCount < TOTAL_IMAGES;
+
+            if (hasUnclassified) {
+                const proceedBtn = document.getElementById('proceedDownloadBtn');
+                proceedBtn.onclick = () => {
+                    closeModal('warningModal');
+                    processDownload(category);
+                };
+                openModal('warningModal');
+            } else {
+                processDownload(category);
+            }
+        }
+
+        function processDownload(category) {
+            const prefixMap = {
+                'long': 'LongLine_',
+                'short': 'ShortLine_',
+                'none': 'NoLine_'
+            };
+
+            const prefix = prefixMap[category];
+            const imagesToDownload = [];
+
+            for (let i = 1; i <= TOTAL_IMAGES; i++) {
+                if (selections[i] === category) {
+                    imagesToDownload.push(i);
+                }
+            }
+
+            if (imagesToDownload.length === 0) {
+                alert('לא סווגו תמונות עבור מחלקה זו.');
+                return;
+            }
+
+            imagesToDownload.forEach((imgNum, index) => {
+                setTimeout(() => {
+                    const link = document.createElement('a');
+                    link.href = `images/${imgNum}.jpg`;
+                    link.download = `${prefix}${imgNum}.jpg`;
+                    document.body.appendChild(link);
+                    link.click();
+                    document.body.removeChild(link);
+                }, index * 250);
+            });
+        }
+
+        // 5. Modal Helpers
+        function openModal(modalId) {
+            document.getElementById(modalId).classList.add('active');
+        }
+
+        function closeModal(modalId) {
+            document.getElementById(modalId).classList.remove('active');
+        }
+    </script>
+</body>
+</html>
