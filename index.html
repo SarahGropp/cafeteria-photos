@@ -86,6 +86,27 @@
             padding: 30px 20px 46px;
         }
 
+        .instructions-card {
+            margin-bottom: 25px;
+            padding: 20px 24px;
+            background-color: var(--card-bg);
+            border-right: 6px solid var(--primary-cyan);
+            border-radius: 16px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.04);
+        }
+
+        .instructions-card h2 {
+            margin-bottom: 10px;
+            color: var(--primary-blue);
+            font-size: 1.2rem;
+        }
+
+        .instructions-card ul {
+            color: #334155;
+            line-height: 1.7;
+            list-style-position: inside;
+        }
+
         .process-board {
             position: relative;
             width: 100%;
@@ -259,6 +280,20 @@
     </header>
 
     <main>
+        <section class="instructions-card" aria-labelledby="work-instructions">
+            <h2 id="work-instructions">הנחיות לעבודה:</h2>
+            <ul>
+                <li>
+                    <strong>תיוג תמונות התור:</strong>
+                    לחצו על הכפתור בשלב 2 כדי לבצע תיוג של התמונות ולהוריד למחשב שלכם את התמונות המתויגות שישמשו לאימון המודל.
+                </li>
+                <li>
+                    <strong>מבחן לבדיקת המודל:</strong>
+                    לחצו על הכפתור בשלב 4 כדי להוריד למחשב שלכם את תמונות המבחן שישמשו לבדיקת המודל שאימנתם.
+                </li>
+            </ul>
+        </section>
+
         <section class="process-board" aria-label="ארבעת השלבים לבניית מודל לזיהוי מצב התור">
             <img
                 class="process-image"
@@ -280,7 +315,7 @@
                     נתייג כל תמונה למחלקה המתאימה:<br>
                     תור ארוך, תור קצר וללא תור.
                 </p>
-                <a class="step-link" href="tagging.html">לחצו כאן לתיוג התמונות.</a>
+                <a class="step-link" href="tagging.html">לחצו כאן לתיוג התמונות</a>
             </article>
 
             <article class="step step-3">
@@ -294,7 +329,7 @@
                     נראה למודל תמונות חדשות של תור.<br>
                     נבדוק האם המודל מצליח לזהות היטב אם זו תמונה תור ארוך, קצר, או שאין תור.
                 </p>
-                <a class="step-link" href="test.html">לחצו כאן להורדת תמונות המבחן!</a>
+                <a class="step-link" href="test.html">לחצו כאן להורדת תמונות המבחן</a>
             </article>
         </section>
     </main>
