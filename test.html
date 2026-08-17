@@ -28,6 +28,7 @@
 
         body {
             min-height: 100vh;
+            padding-bottom: 92px;
             background-color: var(--bg-light);
             color: var(--text-main);
             font-family: "Rubik", Arial, sans-serif;
@@ -185,6 +186,54 @@
             font-weight: 500;
         }
 
+        .toolbar {
+            position: fixed;
+            right: 0;
+            bottom: 0;
+            left: 0;
+            z-index: 1000;
+            padding: 14px 20px;
+            background: rgba(255, 255, 255, 0.96);
+            border-top: 1px solid #CBD5E1;
+            box-shadow: 0 -4px 25px rgba(0, 0, 0, 0.15);
+            backdrop-filter: blur(8px);
+        }
+
+        .toolbar-inner {
+            display: flex;
+            justify-content: center;
+            width: min(1200px, 100%);
+            margin: 0 auto;
+        }
+
+        .home-button {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            padding: 12px 22px;
+            border: 0;
+            border-radius: 12px;
+            background-color: var(--primary-blue);
+            color: #FFFFFF;
+            font: inherit;
+            font-weight: 700;
+            cursor: pointer;
+            box-shadow: 0 4px 12px rgba(43, 76, 155, 0.28);
+            transition: transform 0.2s ease, background-color 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        .home-button:hover {
+            background-color: var(--primary-purple);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 16px rgba(94, 59, 143, 0.3);
+        }
+
+        .home-button:focus-visible {
+            outline: 4px solid rgba(0, 163, 196, 0.35);
+            outline-offset: 4px;
+        }
+
         @media (max-width: 700px) {
             header {
                 padding: 20px 16px;
@@ -219,7 +268,8 @@
         }
 
         @media (prefers-reduced-motion: reduce) {
-            .download-button {
+            .download-button,
+            .home-button {
                 transition: none;
             }
         }
@@ -269,6 +319,15 @@
             </div>
         </section>
     </main>
+
+    <div class="toolbar">
+        <div class="toolbar-inner">
+            <button class="home-button" type="button" onclick="window.location.href='index.html'">
+                <span aria-hidden="true">🏠</span>
+                <span>לעמוד הראשי</span>
+            </button>
+        </div>
+    </div>
 
     <script>
         const DOWNLOAD_FILE = "Test_images.ZIP";
